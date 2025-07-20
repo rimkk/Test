@@ -24,7 +24,10 @@ const Registry = () => {
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [activeTab, setActiveTab] = useState('repos') // 'repos' or 'artifacts'
   const [showOrgDropdown, setShowOrgDropdown] = useState(false)
+  const [chatWidth, setChatWidth] = useState(324)
+  const [isDragging, setIsDragging] = useState(false)
   const dropdownRef = useRef(null)
+  const chatPanelRef = useRef(null)
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
@@ -71,6 +74,40 @@ const Registry = () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [])
+
+  // Handle chat panel resizing
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (isDragging) {
+        const containerWidth = window.innerWidth
+        const newWidth = Math.max(280, Math.min(600, containerWidth - e.clientX - 100))
+        setChatWidth(newWidth)
+      }
+    }
+
+    const handleMouseUp = () => {
+      setIsDragging(false)
+    }
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove)
+      document.addEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = 'col-resize'
+      document.body.style.userSelect = 'none'
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = ''
+      document.body.style.userSelect = ''
+    }
+  }, [isDragging])
+
+  const handleDragStart = (e) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
 
   return (
     <div className="bg-[#121212] flex flex-row gap-2.5 items-center justify-start p-0 relative w-full h-screen">
@@ -824,7 +861,21 @@ const Registry = () => {
                     </div>
                     
                     {/* Chat Panel */}
-                    <div className="bg-[#1c1c1c] flex flex-col-reverse h-full items-start justify-start order-1 overflow-hidden p-0 relative rounded-xl shrink-0 w-[324px]">
+                    <div 
+                      ref={chatPanelRef}
+                      className="bg-[#1c1c1c] flex flex-col-reverse h-full items-start justify-start order-1 overflow-hidden p-0 relative rounded-xl shrink-0"
+                      style={{ width: `${chatWidth}px` }}
+                    >
+                      {/* Drag Handle */}
+                      <div 
+                        className={`absolute left-0 top-0 bottom-0 w-1 cursor-col-resize transition-colors z-10 ${
+                          isDragging ? 'bg-[#666666]' : 'bg-[#474747] hover:bg-[#666666]'
+                        }`}
+                        onMouseDown={handleDragStart}
+                      />
+                      {isDragging && (
+                        <div className="absolute inset-0 bg-[rgba(0,0,0,0.1)] pointer-events-none z-5" />
+                      )}
                       {/* Chat Header */}
                       <div className="bg-[#1c1c1c] order-3 relative shrink-0 w-full">
                         <div className="absolute border-b border-[#292929] bottom-[-0.5px] left-0 pointer-events-none right-0 top-0"/>
