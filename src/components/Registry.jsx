@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {
   ChevronLeftIcon, ChevronRightIcon, ChevronDownIcon, SearchIcon, FilterIcon,
   SyncIcon, RepositoryIcon, ArtifactIcon, ViewIcon, TableIcon, MoreVertIcon,
@@ -23,6 +23,8 @@ const Registry = () => {
   const [selectedOrg, setSelectedOrg] = useState('{git org}')
   const [showSuggestions, setShowSuggestions] = useState(true)
   const [activeTab, setActiveTab] = useState('repos') // 'repos' or 'artifacts'
+  const [showOrgDropdown, setShowOrgDropdown] = useState(false)
+  const dropdownRef = useRef(null)
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
@@ -51,6 +53,24 @@ const Registry = () => {
   const handleTabChange = (tab) => {
     setActiveTab(tab)
   }
+
+  const toggleOrgDropdown = () => {
+    setShowOrgDropdown(!showOrgDropdown)
+  }
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowOrgDropdown(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <div className="bg-[#121212] flex flex-row gap-2.5 items-center justify-start p-0 relative w-full h-screen">
@@ -214,15 +234,44 @@ const Registry = () => {
                                           <div className="absolute border-b border-[#474747] inset-0 pointer-events-none"></div>
                                           <div className="flex gap-3 grow items-center justify-start min-h-px min-w-px p-0 relative shrink-0">
                                             <div className="flex flex-row gap-1 items-center justify-start min-w-[238px] p-0 relative shrink-0">
-                                              <div className="bg-[rgba(231,231,231,0.04)] h-8 relative rounded-lg shrink-0 w-40">
-                                                <div className="flex flex-row items-center overflow-hidden relative size-full">
+                                              <div className="relative" ref={dropdownRef}>
+                                                <button 
+                                                  onClick={toggleOrgDropdown}
+                                                  className="bg-[rgba(231,231,231,0.04)] h-8 relative rounded-lg shrink-0 w-40 flex flex-row items-center overflow-hidden hover:bg-[rgba(231,231,231,0.08)] transition-colors"
+                                                >
                                                   <div className="flex flex-row gap-2 h-8 items-center justify-start px-3 py-0 relative w-full">
                                                     <GitHubIcon className="w-4 h-4 text-gray-400" />
-                                                    <div className="grow text-[rgba(241,241,241,0.48)] text-xs">{`{git org}`}</div>
-                                                    <ChevronDownIcon className="w-4 h-4 text-gray-400" />
+                                                    <div className="grow text-[rgba(241,241,241,0.48)] text-xs">{selectedOrg}</div>
+                                                    <ChevronDownIcon className={`w-4 h-4 text-gray-400 transition-transform ${showOrgDropdown ? 'rotate-180' : ''}`} />
                                                   </div>
-                                                </div>
+                                                </button>
                                                 <div className="absolute border border-[#2a2a2a] border-solid inset-0 pointer-events-none rounded-lg"></div>
+                                                
+                                                {/* Dropdown Menu */}
+                                                {showOrgDropdown && (
+                                                  <div className="absolute top-full left-0 mt-1 bg-[#1c1c1c] border border-[#474747] rounded-lg shadow-lg z-10 min-w-[160px]">
+                                                    <div className="py-1">
+                                                                                                             <button 
+                                                         onClick={() => { setSelectedOrg('{git org}'); setShowOrgDropdown(false); }}
+                                                         className="w-full px-3 py-2 text-left text-xs text-[#eeeef0] hover:bg-[rgba(255,255,255,0.08)] transition-colors"
+                                                       >
+                                                         {'{git org}'}
+                                                       </button>
+                                                      <button 
+                                                        onClick={() => { setSelectedOrg('another-org'); setShowOrgDropdown(false); }}
+                                                        className="w-full px-3 py-2 text-left text-xs text-[#eeeef0] hover:bg-[rgba(255,255,255,0.08)] transition-colors"
+                                                      >
+                                                        another-org
+                                                      </button>
+                                                      <button 
+                                                        onClick={() => { setSelectedOrg('test-org'); setShowOrgDropdown(false); }}
+                                                        className="w-full px-3 py-2 text-left text-xs text-[#eeeef0] hover:bg-[rgba(255,255,255,0.08)] transition-colors"
+                                                      >
+                                                        test-org
+                                                      </button>
+                                                    </div>
+                                                  </div>
+                                                )}
                                               </div>
                                               <button 
                                                 onClick={handleSync}
@@ -278,13 +327,13 @@ const Registry = () => {
                                                         <div className="flex gap-1 items-center justify-start opacity-72 p-0 relative shrink-0 w-full">
                                                           <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
                                                             <GitHubIcon className="w-3 h-3 text-gray-600" />
-                                                            <div className="text-[#eeeef0] text-xs">{`{no} Repositories`}</div>
+                                                            <div className="text-[#eeeef0] text-xs">4 Repositories</div>
                                                           </div>
                                                           <div className="relative shrink-0 w-[9px] h-[9px]">
                                                             <DotIcon className="w-full h-full text-gray-400" />
                                                           </div>
                                                           <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
-                                                            <div className="text-[rgba(247,247,247,0.71)] text-xs">{`{no} Artifacts`}</div>
+                                                            <div className="text-[rgba(247,247,247,0.71)] text-xs">35 Artifacts</div>
                                                           </div>
                                                         </div>
                                                       </div>
@@ -444,16 +493,16 @@ const Registry = () => {
                                                       <div className="flex gap-1 items-center justify-start min-h-inherit px-4 py-3 relative w-full">
                                                         <div className="basis-0 flex flex-col gap-1 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
                                                           <div className="flex gap-1 items-center justify-start opacity-72 p-0 relative shrink-0 w-full">
-                                                            <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
-                                                              <ArchiveIcon className="w-3 h-3 text-gray-600" />
-                                                              <div className="text-[#eeeef0] text-xs">{`{no} Artifacts`}</div>
-                                                            </div>
-                                                            <div className="relative shrink-0 w-[9px] h-[9px]">
-                                                              <DotIcon className="w-full h-full text-gray-400" />
-                                                            </div>
-                                                            <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
-                                                              <div className="text-[rgba(247,247,247,0.71)] text-xs">{`{no} Packages`}</div>
-                                                            </div>
+                                                                                                                      <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                            <ArchiveIcon className="w-3 h-3 text-gray-600" />
+                                                            <div className="text-[#eeeef0] text-xs">5 Artifacts</div>
+                                                          </div>
+                                                          <div className="relative shrink-0 w-[9px] h-[9px]">
+                                                            <DotIcon className="w-full h-full text-gray-400" />
+                                                          </div>
+                                                          <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                            <div className="text-[rgba(247,247,247,0.71)] text-xs">3 Package Types</div>
+                                                          </div>
                                                           </div>
                                                         </div>
                                                       </div>
@@ -699,15 +748,15 @@ const Registry = () => {
                                                                 {[DockerIcon, NpmIcon, GoIcon, MavenIcon].map((Icon, i) => (
                                                                   <div key={i} className="mr-[-1.5px] relative shrink-0 w-6 h-6">
                                                                     <div className="absolute inset-0">
-                                                                      <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
-                                                                        <Icon className="w-4 h-4 text-gray-600" />
+                                                                      <div className="w-6 h-6 bg-[#292929] border border-[#474747] rounded-full flex items-center justify-center">
+                                                                        <Icon className="w-4 h-4 text-gray-400" />
                                                                       </div>
                                                                     </div>
                                                                   </div>
                                                                 ))}
                                                                 <div className="mr-[-1.5px] relative shrink-0 w-6 h-6">
                                                                   <div className="absolute inset-0">
-                                                                    <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center">
+                                                                    <div className="w-6 h-6 bg-[#292929] border border-[#474747] rounded-full flex items-center justify-center">
                                                                       <span className="text-[rgba(247,247,247,0.71)] text-xs font-medium">9+</span>
                                                                     </div>
                                                                   </div>
