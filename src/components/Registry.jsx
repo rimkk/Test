@@ -547,11 +547,11 @@ const Registry = () => {
                                                 {/* Artifacts Table Rows */}
                                                 <div className="flex flex-col items-start justify-start p-0 relative shrink-0 w-full">
                                                   {[
-                                                    { name: "frontend-app:latest", type: "Docker", size: "245MB", updated: "Updated 2 hours ago", status: "safe", versions: 32 },
-                                                    { name: "backend-api:v1.2.3", type: "Docker", size: "189MB", updated: "Updated 1 day ago", status: "safe", versions: 18 },
-                                                    { name: "react-components@2.1.0", type: "NPM", size: "45MB", updated: "Updated 3 days ago", status: "warning", versions: 12 },
-                                                    { name: "auth-service:stable", type: "Docker", size: "156MB", updated: "Updated 1 week ago", status: "safe", versions: 8 },
-                                                    { name: "go-module@v0.5.1", type: "Go", size: "12MB", updated: "Updated 2 weeks ago", status: "safe", versions: 5 }
+                                                    { name: "frontend-app:latest", type: "Docker", size: "245MB", updated: "Updated 2 hours ago", versions: 32 },
+                                                    { name: "backend-api:v1.2.3", type: "Docker", size: "189MB", updated: "Updated 1 day ago", versions: 18 },
+                                                    { name: "react-components@2.1.0", type: "NPM", size: "45MB", updated: "Updated 3 days ago", versions: 12 },
+                                                    { name: "auth-service:stable", type: "Docker", size: "156MB", updated: "Updated 1 week ago", versions: 8 },
+                                                    { name: "go-module@v0.5.1", type: "Go", size: "12MB", updated: "Updated 2 weeks ago", versions: 5 }
                                                   ].map((artifact, index) => (
                                                     <div key={index} className="flex flex-row items-center justify-start p-0 relative shrink-0 w-full hover:bg-[rgba(255,255,255,0.02)] transition-colors">
                                                       {index > 0 && (
@@ -567,15 +567,6 @@ const Registry = () => {
                                                                 </div>
                                                                 <div className="bg-[rgba(235,235,235,0.08)] flex flex-row gap-1 items-center justify-center px-1.5 py-0.5 relative rounded-lg shrink-0">
                                                                   <div className="text-[#b5b5b5] text-xs font-medium">{artifact.versions}</div>
-                                                                </div>
-                                                                <div className={`flex flex-row gap-1.5 items-center justify-center px-1.5 py-0.5 relative rounded-lg shrink-0 ${
-                                                                  artifact.status === 'safe' ? 'bg-[rgba(34,197,94,0.18)]' : 'bg-[rgba(251,191,36,0.18)]'
-                                                                }`}>
-                                                                  <div className={`text-xs font-medium ${
-                                                                    artifact.status === 'safe' ? 'text-[#86efac]' : 'text-[#fde047]'
-                                                                  }`}>
-                                                                    {artifact.status === 'safe' ? 'Safe' : 'Warning'}
-                                                                  </div>
                                                                 </div>
                                                               </div>
                                                               <div className="flex gap-1 items-center justify-start opacity-72 p-0 relative shrink-0 w-full">
