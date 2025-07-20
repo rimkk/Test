@@ -22,6 +22,7 @@ const Registry = () => {
   const [chatMessage, setChatMessage] = useState('')
   const [selectedOrg, setSelectedOrg] = useState('{git org}')
   const [showSuggestions, setShowSuggestions] = useState(true)
+  const [activeTab, setActiveTab] = useState('repos') // 'repos' or 'artifacts'
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value)
@@ -45,6 +46,10 @@ const Registry = () => {
 
   const toggleViewMode = () => {
     setViewMode(viewMode === 'table' ? 'grid' : 'table')
+  }
+
+  const handleTabChange = (tab) => {
+    setActiveTab(tab)
   }
 
   return (
@@ -97,16 +102,22 @@ const Registry = () => {
                   <div className="flex flex-row h-full items-center justify-start order-2 p-0 relative shrink-0">
                     <div className="bg-[#121212] flex flex-col h-full items-center justify-start max-w-[88px] pb-4 pt-0 px-0 relative shrink-0">
                       <div className="basis-0 flex flex-col grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
-                        <div className="flex flex-col gap-0.5 items-center justify-center min-h-14 min-w-14 px-1 py-2 relative shrink-0">
-                          <div className="bg-[#292929] flex flex-row gap-2 items-center justify-center p-0 relative rounded-full w-8 h-8 border border-[#474747]">
-                            <RepositoryIcon className="w-4 h-4 text-gray-300" />
+                        <button 
+                          onClick={() => handleTabChange('repos')}
+                          className={`flex flex-col gap-0.5 items-center justify-center min-h-14 min-w-14 px-1 py-2 relative shrink-0 transition-opacity ${activeTab === 'repos' ? 'opacity-100' : 'opacity-60 hover:opacity-80'}`}
+                        >
+                          <div className={`flex flex-row gap-2 items-center justify-center p-0 relative rounded-full w-8 h-8 ${activeTab === 'repos' ? 'bg-[#292929] border border-[#474747]' : ''}`}>
+                            <RepositoryIcon className={`w-4 h-4 ${activeTab === 'repos' ? 'text-gray-300' : 'text-gray-400'}`} />
                           </div>
-                        </div>
-                        <div className="flex flex-col gap-0.5 items-center justify-center min-h-14 min-w-14 px-1 py-2 relative shrink-0 opacity-60">
-                          <div className="flex flex-row gap-2 items-center justify-center p-2 relative rounded-full w-8 h-8">
-                            <ArtifactIcon className="w-4 h-4 text-gray-400" />
+                        </button>
+                        <button 
+                          onClick={() => handleTabChange('artifacts')}
+                          className={`flex flex-col gap-0.5 items-center justify-center min-h-14 min-w-14 px-1 py-2 relative shrink-0 transition-opacity ${activeTab === 'artifacts' ? 'opacity-100' : 'opacity-60 hover:opacity-80'}`}
+                        >
+                          <div className={`flex flex-row gap-2 items-center justify-center p-2 relative rounded-full w-8 h-8 ${activeTab === 'artifacts' ? 'bg-[#292929] border border-[#474747]' : ''}`}>
+                            <ArtifactIcon className={`w-4 h-4 ${activeTab === 'artifacts' ? 'text-gray-300' : 'text-gray-400'}`} />
                           </div>
-                        </div>
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -155,19 +166,30 @@ const Registry = () => {
                                       <div className="flex flex-row h-10 items-start justify-start overflow-hidden p-0 relative shrink-0">
                                         <div className="absolute bg-[rgba(232,234,235,0.19)] bottom-0 h-px left-0 right-0"></div>
                                         <div className="flex flex-row h-full items-center justify-start p-0 relative shrink-0">
-                                          <div className="flex flex-row h-full items-center justify-center overflow-hidden px-2 py-0 relative shrink-0">
-                                            <div className="absolute bg-[#548ee4] bottom-0 h-0.5 left-0 right-0"></div>
+                                          <button 
+                                            onClick={() => handleTabChange('repos')}
+                                            className={`flex flex-row h-full items-center justify-center overflow-hidden px-2 py-0 relative shrink-0 cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition-colors ${activeTab === 'repos' ? 'bg-[rgba(255,255,255,0.05)]' : ''}`}
+                                          >
+                                            {activeTab === 'repos' && (
+                                              <div className="absolute bg-[#548ee4] bottom-0 h-0.5 left-0 right-0"></div>
+                                            )}
                                             <div className="flex flex-row gap-2 h-7 items-center justify-center p-2 relative rounded-lg">
-                                              <RepositoryIcon className="w-4 h-4 text-[#edeef0]" />
-                                              <div className="text-[#edeef0] text-xs font-medium">Git Repos</div>
+                                              <RepositoryIcon className={`w-4 h-4 ${activeTab === 'repos' ? 'text-[#edeef0]' : 'text-[rgba(247,247,248,0.71)]'}`} />
+                                              <div className={`text-xs font-medium ${activeTab === 'repos' ? 'text-[#edeef0]' : 'text-[rgba(247,247,248,0.71)]'}`}>Git Repos</div>
                                             </div>
-                                          </div>
-                                          <div className="flex flex-row h-full items-center justify-center overflow-hidden px-2 py-0 relative shrink-0">
+                                          </button>
+                                          <button 
+                                            onClick={() => handleTabChange('artifacts')}
+                                            className={`flex flex-row h-full items-center justify-center overflow-hidden px-2 py-0 relative shrink-0 cursor-pointer hover:bg-[rgba(255,255,255,0.05)] transition-colors ${activeTab === 'artifacts' ? 'bg-[rgba(255,255,255,0.05)]' : ''}`}
+                                          >
+                                            {activeTab === 'artifacts' && (
+                                              <div className="absolute bg-[#548ee4] bottom-0 h-0.5 left-0 right-0"></div>
+                                            )}
                                             <div className="flex flex-row gap-2 h-7 items-center justify-center p-2 relative rounded-lg">
-                                              <ArchiveIcon className="w-4 h-4 text-[rgba(247,247,248,0.71)]" />
-                                              <div className="text-[rgba(247,247,248,0.71)] text-xs">All Artifacts</div>
+                                              <ArchiveIcon className={`w-4 h-4 ${activeTab === 'artifacts' ? 'text-[#edeef0]' : 'text-[rgba(247,247,248,0.71)]'}`} />
+                                              <div className={`text-xs ${activeTab === 'artifacts' ? 'text-[#edeef0] font-medium' : 'text-[rgba(247,247,248,0.71)]'}`}>All Artifacts</div>
                                             </div>
-                                          </div>
+                                          </button>
                                         </div>
                                       </div>
                                     </div>
@@ -182,6 +204,7 @@ const Registry = () => {
                                 <div className="flex gap-10 items-start justify-start pb-4 pt-3 px-6 relative size-full">
                                   
                                   {/* Main Table Area */}
+                                  {activeTab === 'repos' && (
                                   <div className="basis-0 flex gap-4 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
                                     <div className="basis-0 flex gap-4 grow items-start justify-start min-h-px min-w-[312px] overflow-hidden p-0 relative shrink-0">
                                       <div className="basis-0 flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
@@ -364,6 +387,180 @@ const Registry = () => {
                                       </div>
                                     </div>
                                   </div>
+                                  
+                                  )}
+                                  
+                                  {/* All Artifacts Tab Content */}
+                                  {activeTab === 'artifacts' && (
+                                    <div className="basis-0 flex gap-4 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                      <div className="basis-0 flex gap-4 grow items-start justify-start min-h-px min-w-[312px] overflow-hidden p-0 relative shrink-0">
+                                        <div className="basis-0 flex flex-col gap-4 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                          
+                                          {/* Artifacts Search and Filters */}
+                                          <div className="flex flex-row gap-10 items-center justify-start min-h-14 px-0 py-2 relative shrink-0 w-full">
+                                            <div className="absolute border-b border-[#474747] inset-0 pointer-events-none"></div>
+                                            <div className="flex gap-3 grow items-center justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                              <div className="basis-0 flex flex-row gap-2 grow items-center justify-end min-h-8 min-w-[132px] p-0 relative shrink-0">
+                                                <div className="basis-0 bg-[rgba(255,255,255,0)] flex flex-col gap-2 grow items-start justify-start max-w-[300px] min-h-px min-w-[124px] p-0 relative shrink-0">
+                                                  <div className="bg-[rgba(0,0,0,0.25)] h-8 relative rounded-xl shrink-0 w-full">
+                                                    <div className="absolute border border-[rgba(235,235,235,0.02)] border-solid inset-0 pointer-events-none rounded-xl"></div>
+                                                    <div className="flex flex-row items-center relative size-full">
+                                                      <div className="flex flex-row h-8 items-center justify-start px-1 py-0 relative w-full">
+                                                        <div className="flex flex-row gap-2 h-full items-center justify-center px-1 py-0 relative shrink-0">
+                                                          <SearchIcon className="w-4 h-4 text-gray-400" />
+                                                        </div>
+                                                        <div className="basis-0 grow h-full min-h-px min-w-px relative shrink-0">
+                                                          <div className="flex flex-row items-center relative size-full">
+                                                            <div className="flex flex-row gap-1 items-center justify-start px-1 py-0 relative size-full">
+                                                              <input
+                                                                type="text"
+                                                                value={searchQuery}
+                                                                onChange={handleSearch}
+                                                                placeholder="Search artifacts..."
+                                                                className="grow bg-transparent text-[rgba(238,238,238,0.43)] text-xs placeholder-[rgba(238,238,238,0.43)] focus:outline-none focus:text-white"
+                                                              />
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <IconButton>
+                                                  <FilterIcon className="w-4 h-4 text-gray-400" />
+                                                </IconButton>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                          {/* Artifacts Table */}
+                                          <div className="flex flex-col gap-10 items-start justify-start min-w-64 p-0 relative shrink-0 w-full">
+                                            <div className="relative rounded-lg shrink-0 w-full border border-[#474747] overflow-hidden">
+                                              <div className="flex flex-col items-center justify-start overflow-hidden p-0 relative w-full">
+                                                {/* Artifacts Table Header */}
+                                                <div className="flex flex-row items-center justify-start p-0 relative shrink-0 w-full bg-[#232323] border-b border-[#474747]">
+                                                  <div className="basis-0 grow min-h-12 min-w-px relative shrink-0">
+                                                    <div className="flex flex-row items-center min-h-inherit relative size-full">
+                                                      <div className="flex gap-1 items-center justify-start min-h-inherit px-4 py-3 relative w-full">
+                                                        <div className="basis-0 flex flex-col gap-1 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                                          <div className="flex gap-1 items-center justify-start opacity-72 p-0 relative shrink-0 w-full">
+                                                            <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                              <ArchiveIcon className="w-3 h-3 text-gray-600" />
+                                                              <div className="text-[#eeeef0] text-xs">{`{no} Artifacts`}</div>
+                                                            </div>
+                                                            <div className="relative shrink-0 w-[9px] h-[9px]">
+                                                              <DotIcon className="w-full h-full text-gray-400" />
+                                                            </div>
+                                                            <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                              <div className="text-[rgba(247,247,247,0.71)] text-xs">{`{no} Packages`}</div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                  <div className="basis-0 grow min-h-12 min-w-px relative shrink-0">
+                                                    <div className="flex flex-row items-center min-h-inherit relative size-full">
+                                                      <div className="flex gap-1 items-center justify-start min-h-inherit px-4 py-3 relative w-full">
+                                                        <div className="basis-0 flex flex-col gap-1 grow items-end justify-center min-h-px min-w-px p-0 relative shrink-0">
+                                                          <div className="flex gap-1 items-center justify-end opacity-72 p-0 relative shrink-0 w-full">
+                                                            <IconButton 
+                                                              onClick={toggleViewMode}
+                                                              className={viewMode === 'grid' ? "bg-[rgba(229,229,229,0.11)] opacity-82" : ""}
+                                                            >
+                                                              <GridIcon className="w-4 h-4 text-gray-300" />
+                                                            </IconButton>
+                                                            <IconButton 
+                                                              onClick={toggleViewMode}
+                                                              className={viewMode === 'table' ? "bg-[rgba(229,229,229,0.11)] opacity-82" : ""}
+                                                            >
+                                                              <TableIcon className="w-4 h-4 text-gray-400" />
+                                                            </IconButton>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                
+                                                {/* Artifacts Table Rows */}
+                                                <div className="flex flex-col items-start justify-start p-0 relative shrink-0 w-full">
+                                                  {[
+                                                    { name: "frontend-app:latest", type: "Docker", size: "245MB", updated: "Updated 2 hours ago", status: "safe" },
+                                                    { name: "backend-api:v1.2.3", type: "Docker", size: "189MB", updated: "Updated 1 day ago", status: "safe" },
+                                                    { name: "react-components@2.1.0", type: "NPM", size: "45MB", updated: "Updated 3 days ago", status: "warning" },
+                                                    { name: "auth-service:stable", type: "Docker", size: "156MB", updated: "Updated 1 week ago", status: "safe" },
+                                                    { name: "go-module@v0.5.1", type: "Go", size: "12MB", updated: "Updated 2 weeks ago", status: "safe" }
+                                                  ].map((artifact, index) => (
+                                                    <div key={index} className="flex flex-row items-center justify-start p-0 relative shrink-0 w-full hover:bg-[rgba(255,255,255,0.02)] transition-colors">
+                                                      {index > 0 && (
+                                                        <div className="absolute border-t border-[#474747] top-0 left-0 right-0 pointer-events-none"/>
+                                                      )}
+                                                      <div className="basis-0 grow min-h-9 min-w-px relative shrink-0">
+                                                        <div className="flex flex-row items-center min-h-inherit relative size-full">
+                                                          <div className="flex gap-1 items-center justify-start min-h-inherit px-4 py-2 relative w-full">
+                                                            <div className="basis-0 flex flex-col gap-1 grow items-start justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                                              <div className="flex gap-1 items-center justify-start min-h-6 p-0 relative shrink-0 w-full">
+                                                                <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                                  <div className="text-[#eeeef0] text-xs font-medium">{artifact.name}</div>
+                                                                </div>
+                                                                <div className={`flex flex-row gap-1.5 items-center justify-center px-1.5 py-0.5 relative rounded-lg shrink-0 ${
+                                                                  artifact.status === 'safe' ? 'bg-[rgba(34,197,94,0.18)]' : 'bg-[rgba(251,191,36,0.18)]'
+                                                                }`}>
+                                                                  <div className={`text-xs font-medium ${
+                                                                    artifact.status === 'safe' ? 'text-[#86efac]' : 'text-[#fde047]'
+                                                                  }`}>
+                                                                    {artifact.status === 'safe' ? 'Safe' : 'Warning'}
+                                                                  </div>
+                                                                </div>
+                                                              </div>
+                                                              <div className="flex gap-1 items-center justify-start opacity-72 p-0 relative shrink-0 w-full">
+                                                                <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                                  {artifact.type === 'Docker' && <DockerIcon className="w-3 h-3 text-gray-600" />}
+                                                                  {artifact.type === 'NPM' && <NpmIcon className="w-3 h-3 text-gray-600" />}
+                                                                  {artifact.type === 'Go' && <GoIcon className="w-3 h-3 text-gray-600" />}
+                                                                  <div className="text-[#eeeef0] text-xs">{artifact.type}</div>
+                                                                </div>
+                                                                <div className="relative shrink-0 w-[9px] h-[9px]">
+                                                                  <DotIcon className="w-full h-full text-gray-400" />
+                                                                </div>
+                                                                <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                                  <div className="text-[#eeeef0] text-xs">{artifact.size}</div>
+                                                                </div>
+                                                                <div className="relative shrink-0 w-[9px] h-[9px]">
+                                                                  <DotIcon className="w-full h-full text-gray-400" />
+                                                                </div>
+                                                                <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
+                                                                  <div className="text-[#eeeef0] text-xs">{artifact.updated}</div>
+                                                                </div>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                      <div className="basis-0 grow min-h-9 min-w-px relative shrink-0">
+                                                        <div className="flex flex-row items-center min-h-inherit relative size-full">
+                                                          <div className="flex gap-1 items-center justify-start min-h-inherit px-4 py-2 relative w-full">
+                                                            <div className="basis-0 flex flex-col gap-1 grow items-end justify-center min-h-px min-w-px p-0 relative shrink-0">
+                                                              <div className="flex gap-1 items-center justify-end min-h-6 p-0 relative shrink-0 w-full">
+                                                                <IconButton className="hover:bg-[rgba(255,255,255,0.08)]">
+                                                                  <MoreVertIcon className="w-4 h-4 text-gray-400" />
+                                                                </IconButton>
+                                                              </div>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  ))}
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
                                   
                                   {/* Insights Panel */}
                                   <div className="flex flex-col items-start justify-start max-w-[272px] min-w-[272px] p-0 relative shrink-0">
