@@ -449,6 +449,18 @@ const Registry = () => {
                                           <div className="flex flex-row gap-10 items-center justify-start min-h-14 px-0 py-2 relative shrink-0 w-full">
                                             <div className="absolute border-b border-[#474747] inset-0 pointer-events-none"></div>
                                             <div className="flex gap-3 grow items-center justify-start min-h-px min-w-px p-0 relative shrink-0">
+                                              <div className="flex flex-row gap-1 items-center justify-start min-w-[238px] p-0 relative shrink-0">
+                                                <div className="bg-[rgba(231,231,231,0.04)] h-8 relative rounded-lg shrink-0 w-40">
+                                                  <div className="flex flex-row items-center overflow-hidden relative size-full">
+                                                    <div className="flex flex-row gap-2 h-8 items-center justify-start px-3 py-0 relative w-full">
+                                                      <ArchiveIcon className="w-4 h-4 text-gray-400" />
+                                                      <div className="grow text-[rgba(241,241,241,0.48)] text-xs">All Artifacts</div>
+                                                      <ChevronDownIcon className="w-4 h-4 text-gray-400" />
+                                                    </div>
+                                                  </div>
+                                                  <div className="absolute border border-[#2a2a2a] border-solid inset-0 pointer-events-none rounded-lg"></div>
+                                                </div>
+                                              </div>
                                               <div className="basis-0 flex flex-row gap-2 grow items-center justify-end min-h-8 min-w-[132px] p-0 relative shrink-0">
                                                 <div className="basis-0 bg-[rgba(255,255,255,0)] flex flex-col gap-2 grow items-start justify-start max-w-[300px] min-h-px min-w-[124px] p-0 relative shrink-0">
                                                   <div className="bg-[rgba(0,0,0,0.25)] h-8 relative rounded-xl shrink-0 w-full">
@@ -535,11 +547,11 @@ const Registry = () => {
                                                 {/* Artifacts Table Rows */}
                                                 <div className="flex flex-col items-start justify-start p-0 relative shrink-0 w-full">
                                                   {[
-                                                    { name: "frontend-app:latest", type: "Docker", size: "245MB", updated: "Updated 2 hours ago", status: "safe" },
-                                                    { name: "backend-api:v1.2.3", type: "Docker", size: "189MB", updated: "Updated 1 day ago", status: "safe" },
-                                                    { name: "react-components@2.1.0", type: "NPM", size: "45MB", updated: "Updated 3 days ago", status: "warning" },
-                                                    { name: "auth-service:stable", type: "Docker", size: "156MB", updated: "Updated 1 week ago", status: "safe" },
-                                                    { name: "go-module@v0.5.1", type: "Go", size: "12MB", updated: "Updated 2 weeks ago", status: "safe" }
+                                                    { name: "frontend-app:latest", type: "Docker", size: "245MB", updated: "Updated 2 hours ago", status: "safe", versions: 32 },
+                                                    { name: "backend-api:v1.2.3", type: "Docker", size: "189MB", updated: "Updated 1 day ago", status: "safe", versions: 18 },
+                                                    { name: "react-components@2.1.0", type: "NPM", size: "45MB", updated: "Updated 3 days ago", status: "warning", versions: 12 },
+                                                    { name: "auth-service:stable", type: "Docker", size: "156MB", updated: "Updated 1 week ago", status: "safe", versions: 8 },
+                                                    { name: "go-module@v0.5.1", type: "Go", size: "12MB", updated: "Updated 2 weeks ago", status: "safe", versions: 5 }
                                                   ].map((artifact, index) => (
                                                     <div key={index} className="flex flex-row items-center justify-start p-0 relative shrink-0 w-full hover:bg-[rgba(255,255,255,0.02)] transition-colors">
                                                       {index > 0 && (
@@ -552,6 +564,9 @@ const Registry = () => {
                                                               <div className="flex gap-1 items-center justify-start min-h-6 p-0 relative shrink-0 w-full">
                                                                 <div className="flex flex-row gap-0.5 items-center justify-center p-0 relative shrink-0">
                                                                   <div className="text-[#eeeef0] text-xs font-medium">{artifact.name}</div>
+                                                                </div>
+                                                                <div className="bg-[rgba(235,235,235,0.08)] flex flex-row gap-1 items-center justify-center px-1.5 py-0.5 relative rounded-lg shrink-0">
+                                                                  <div className="text-[#b5b5b5] text-xs font-medium">{artifact.versions}</div>
                                                                 </div>
                                                                 <div className={`flex flex-row gap-1.5 items-center justify-center px-1.5 py-0.5 relative rounded-lg shrink-0 ${
                                                                   artifact.status === 'safe' ? 'bg-[rgba(34,197,94,0.18)]' : 'bg-[rgba(251,191,36,0.18)]'
